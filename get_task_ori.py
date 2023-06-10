@@ -431,24 +431,6 @@ def get_task(args):
         all_eval_text_to_encode = [raw_item['question']
                                    for raw_item in total_eval_examples]
         label_map = None
-    elif task_name == 'diffusiondb':
-        with open(os.path.join(args.prompt_dir, f'sample_merge_{args.prompt_part}.json')) as f:
-            total_train_examples = json.load(f)
-        with open(os.path.join(args.prompt_dir, f'sample_merge_{args.prompt_part}.json')) as f:
-            total_eval_examples = json.load(f)
-        
-        def format_example(example,label_map,**kwargs):
-            return f"title: {example['title']}; content: {example['content']}",\
-                   f"{label_map[example['label']]}"
-
-        all_train_text_to_encode = ["title: {} ; content: {}".format(raw_item["title"], raw_item["content"])
-                                    for raw_item in total_train_examples]
-        all_eval_text_to_encode = ["title: {} ; content: {}".format(raw_item["title"], raw_item["content"])
-                                   for raw_item in total_eval_examples]
-        
-        label_map = {}
-        for fid in range(1, 14001):
-            label_map[fid] = "part-{}".format("%06d" % fid)
     else:
         raise ValueError(f"{args.task_name} is not supported")
     return total_train_examples,total_eval_examples,all_train_text_to_encode,\
